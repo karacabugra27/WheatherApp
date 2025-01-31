@@ -1,6 +1,7 @@
 package com.example.weatherapp.view
 
 import android.os.Bundle
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,21 +26,37 @@ class MainActivity : AppCompatActivity() {
         binding.nemOraniResmi.setImageResource(R.drawable.humidity)
         binding.ruzgarHiziResmi.setImageResource(R.drawable.windss)
         binding.yagmurOraniResmi.setImageResource(R.drawable.watersplash)
-        binding.aramaCubugu.setOnClickListener {
-            val city = binding.sehirIsmi.text.toString()
-                .trim()
+        binding.aramaCubugu.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query:String?):Boolean {
+                val city = query?.trim()
 
-            if(city.isNotEmpty()) {
-                //apikey 3423ee3e77781176e013300f6892582b
-                val apiKey = "3423ee3e77781176e013300f6892582b"
-                val units = "metric"
-                viewModel.verileriAl(city, apiKey, units)
-            } else {
-                Toast.makeText(this, "Şehir adı girmeniz gereklidir!", Toast.LENGTH_LONG)
-                    .show()
+                if(!city.isNullOrEmpty()) {
+                    val apiKey = "3423ee3e77781176e013300f6892582b"
+                    val units = "metric"
+                    viewModel.verileriAl(city, apiKey, units)
+                } else {
+                    Toast.makeText(this@MainActivity, "Şehir adı girmeniz gereklidir!", Toast.LENGTH_LONG)
+                        .show()
+                }
+                return true
             }
-        }
 
+            override fun onQueryTextChange(newText:String?):Boolean {
+                val city = newText?.trim()
+
+                if(!city.isNullOrEmpty()) {
+                    val apiKey = "3423ee3e77781176e013300f6892582b"
+                    val units = "metric"
+                    viewModel.verileriAl(city, apiKey, units)
+                } else {
+                    Toast.makeText(this@MainActivity, "Şehir adı girmeniz gereklidir!", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                return true
+            }
+
+        })
         observeLiveData()
     }
 
@@ -51,18 +68,18 @@ class MainActivity : AppCompatActivity() {
                 binding.aciklama.text = havaDurumu.weather[0].description
                 binding.nemOrani.text = "%${havaDurumu.main.humidity}"
                 binding.ruzgarHizi.text = havaDurumu.wind.speed.toString()
-                binding.yagmurOrani.text = "%${havaDurumu.rain.`1h`}"
+                binding.yagmurOrani.text = "%${havaDurumu.rain?.`1h`}"
                 binding.tarih.text = tarihAl()
 
-                when (havaDurumu.weather[0].main) {
-                    "Clear" -> binding.havaDurumuImage.setImageResource(R.drawable.sun)
-                    "Rain" -> binding.havaDurumuImage.setImageResource(R.drawable.lightrain)
-                    "Clouds" -> binding.havaDurumuImage.setImageResource(R.drawable.cloudyday)
-                    "Snow" -> binding.havaDurumuImage.setImageResource(R.drawable.snowflake)
+                when(havaDurumu.weather[0].main) {
+                    "Clear"        -> binding.havaDurumuImage.setImageResource(R.drawable.sun)
+                    "Rain"         -> binding.havaDurumuImage.setImageResource(R.drawable.lightrain)
+                    "Clouds"       -> binding.havaDurumuImage.setImageResource(R.drawable.cloudyday)
+                    "Snow"         -> binding.havaDurumuImage.setImageResource(R.drawable.snowflake)
                     "Thunderstorm" -> binding.havaDurumuImage.setImageResource(R.drawable.storm)
-                    "Fog" -> binding.havaDurumuImage.setImageResource(R.drawable.fog)
-                    "Snow" -> binding.havaDurumuImage.setImageResource(R.drawable.snowflake)
-                    else -> binding.havaDurumuImage.setImageResource(R.drawable.sun)
+                    "Fog"          -> binding.havaDurumuImage.setImageResource(R.drawable.fog)
+                    "Snow"         -> binding.havaDurumuImage.setImageResource(R.drawable.snowflake)
+                    else           -> binding.havaDurumuImage.setImageResource(R.drawable.sun)
 
                 }
             }
