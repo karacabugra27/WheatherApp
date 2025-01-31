@@ -8,9 +8,9 @@ interface HavaDurumuAPI {
 
     @GET("weather")
     suspend fun getGuncelHavaDurumu(
-        @Query("id") sehir : String,
+        @Query("q") sehir : String,
         @Query("appid") apiKey : String,
-        @Query("units") units : String = "metric"
+        @Query("units") units : String
     ) : HavaDurumu
 
 
