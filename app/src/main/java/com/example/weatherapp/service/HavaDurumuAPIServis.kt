@@ -11,8 +11,7 @@ class HavaDurumuAPIServis {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val apiServis : HavaDurumuAPI = retrofit.create(HavaDurumuAPI::class.java)
-//apikey 3423ee3e77781176e013300f6892582b
+        val apiServis:HavaDurumuAPI = retrofit.create(HavaDurumuAPI::class.java)
     }
 
 }

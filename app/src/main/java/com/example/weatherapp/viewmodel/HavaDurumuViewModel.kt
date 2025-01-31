@@ -14,10 +14,10 @@ class HavaDurumuViewModel(application:Application) : AndroidViewModel(applicatio
     val havaDurumu = MutableLiveData<HavaDurumu>()
 
 
-    private fun verileriAl(city:String, apiKey:String, units:String) {
+    fun verileriAl(city:String, apiKey:String, units:String) {
         viewModelScope.launch {
-                val yanit = HavaDurumuAPIServis.RetrofitClient.apiServis.getGuncelHavaDurumu(city,apiKey,units)
-                havaDurumu.value = yanit
+            val yanit = HavaDurumuAPIServis.RetrofitClient.apiServis.getGuncelHavaDurumu(city, apiKey, units)
+            havaDurumu.value = yanit
         }
     }
 
